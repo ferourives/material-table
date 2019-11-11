@@ -48,7 +48,7 @@ class App extends Component {
       { id: 6, name: 'A6', surname: 'C', isMarried: true, birthDate: new Date(1989, 1, 1), birthCity: 34, sex: 'Female', type: 'child', insertDateTime: new Date(2018, 1, 1, 12, 23, 44), time: new Date(1900, 1, 1, 14, 23, 35), parentId: 5 },
     ],
     columns: [
-      { title: 'Adı', field: 'name', filterPlaceholder: 'Adı filter' },
+      { title: 'Adı', field: 'name', filterPlaceholder: 'Adı filter', },
       { title: 'Soyadı', field: 'surname', initialEditValue: 'test' },
       { title: 'Evli', field: 'isMarried', type: 'boolean' },
       { title: 'Cinsiyet', field: 'sex', disableClick: true, editable: 'onAdd' },
@@ -80,7 +80,12 @@ class App extends Component {
                   title="Demo Title"
                   options={{
                     columnsButton: true,
-                    searchText: 'a6',
+                    searchText: '',
+                    selection: true,
+                      selectionProps: rowData => ({
+                          disabled: rowData.type === 'adult',
+                          color: 'primary'
+                      }),
                     defaultExpanded: row => row.surname === 'C'
                   }}
                   onSearchChange={(e) => console.log("search changed: " + e)}
@@ -158,12 +163,17 @@ class App extends Component {
               options={{
                 grouping: true,
                 filtering: true,
+                selection: true,
+                  selectionProps: rowData => ({
+                      disabled: rowData.first_name === 'Janet',
+                      color: 'primary'
+                  })
               }}
               data={query => new Promise((resolve, reject) => {
                 let url = 'https://reqres.in/api/users?'
                 url += 'per_page=' + query.pageSize
                 url += '&page=' + (query.page + 1)
-                console.log(query);
+                //console.log(query);
                 fetch(url)
                   .then(response => response.json())
                   .then(result => {
